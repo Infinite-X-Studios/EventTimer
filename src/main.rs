@@ -11,6 +11,6 @@ fn main() {
     eframe::run_native(
         "event timer",
         native_options,
-        Box::new(|cc| Box::new(event_timer:TemplateApp::new(cc))),
+        Box::new(|cc| Box::new(event_timer::TemplateApp::new(cc))),
     );
 }
