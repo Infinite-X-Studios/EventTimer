@@ -3,11 +3,17 @@ use chrono::prelude::*;
 /// We derive Deserialize/Serialize so we can persist app state on shutdown.
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)] // if we add new fields, give them default values when deserializing old state
-pub struct TemplateApp {}
+pub struct TemplateApp {
+    label: String,
+    value: f32,
+}
 
 impl Default for TemplateApp {
     fn default() -> Self {
-        Self {}
+        Self {
+            label: "Event Timer".to_owned(),
+            value: 2.7,
+        }
     }
 }
 
@@ -36,7 +42,7 @@ impl eframe::App for TemplateApp {
     /// Called each time the UI needs repainting, which may be many times per second.
     /// Put your widgets into a `SidePanel`, `TopPanel`, `CentralPanel`, `Window` or `Area`.
     fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
-        let Self {} = self;
+        let Self { label, value } = self;
 
         // Examples of how to create different panels and windows.
         // Pick whichever suits you.
@@ -59,8 +65,7 @@ impl eframe::App for TemplateApp {
 
             ui.horizontal(|ui| {
                 ui.label("Write something: ");
-                ui.text_edit_singleline(
-                    &mut "This is where a lable was, before I deleted it.")});
+                ui.text_edit_singleline(label)
             });
 
             ui.add(egui::Slider::new(value, 0.0..=10.0).text("value"));
