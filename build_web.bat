@@ -47,7 +47,7 @@ DEL /F docs\%CRATE_NAME_SNAKE_CASE%_bg.wasm
 
 echo Building rust...
 SET BUILD=release
-cargo build -p %CRATE_NAME% --release --lib --target wasm32-unknown-unknown
+cargo build -p %CRATE_NAME% --lib --target wasm32-unknown-unknown
 
 @REM Get the output directory (in the workspace it is in another location)
 FOR /F "delims=" %%i IN ('cargo metadata --format-version=1 ^| jq --raw-output .target_directory') DO SET TARGET=%%i

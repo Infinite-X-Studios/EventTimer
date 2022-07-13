@@ -9,7 +9,7 @@ fn main() {
 
     let native_options = eframe::NativeOptions::default();
     eframe::run_native(
-        "event timer",
+        "Event Timer",
         native_options,
         Box::new(|cc| Box::new(event_timer::TemplateApp::new(cc))),
     );
