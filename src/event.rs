@@ -1,24 +1,37 @@
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, Duration, Local, Utc};
 
-pub struct EventStruct {
-    start_time: i64,
-    duration: Option<f64>,
-}
+pub struct EventBuilder {}
+impl EventBuilder {
+    pub fn new() -> Event {
+        let start_time = Some(Local::now());
 
-impl Default for EventStruct {
-    fn default() -> Self {
-        Self {
-            start_time: 0i64,
-            duration: None,
+        Event {
+            start_time,
+            stop_time: None,
         }
     }
 }
+pub struct Event {
+    start_time: Option<DateTime<Local>>,
+    stop_time: Option<DateTime<Local>>,
+}
 
-impl EventStruct {
-    fn new() -> Self {
+impl Event {
+    fn stop_event(&self) {}
+
+    fn duration(&self) -> Result<Duration, String> {
+        match (self.start_time, self.stop_time) {
+            (Some(start), Some(stop)) => Ok(stop - start),
+            (Some(start), None) => Ok(Local::now() - start),
+            _ => Err("The event does not have any set items".to_owned()),
+        }
+    }
+}
+impl Default for Event {
+    fn default() -> Self {
         Self {
-            start_time: 0i64,
-            duration: Some(0f64),
+            start_time: None,
+            stop_time: None,
         }
     }
 }

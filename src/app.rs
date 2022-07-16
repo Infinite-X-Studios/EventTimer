@@ -1,10 +1,13 @@
-use chrono::prelude::*;
+use chrono::Local;
+
+use crate::event::{Event, EventBuilder};
 
 /// We derive Deserialize/Serialize so we can persist app state on shutdown.
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)] // if we add new fields, give them default values when deserializing old state
 pub struct TemplateApp {
     label: String,
+    date_label: String,
     value: f32,
 }
 
@@ -12,6 +15,7 @@ impl Default for TemplateApp {
     fn default() -> Self {
         Self {
             label: "Event Timer".to_owned(),
+            date_label: "".to_string(),
             value: 2.7,
         }
     }
@@ -42,7 +46,11 @@ impl eframe::App for TemplateApp {
     /// Called each time the UI needs repainting, which may be many times per second.
     /// Put your widgets into a `SidePanel`, `TopPanel`, `CentralPanel`, `Window` or `Area`.
     fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
-        let Self { label, value } = self;
+        let Self {
+            label,
+            date_label,
+            value,
+        } = self;
 
         // Examples of how to create different panels and windows.
         // Pick whichever suits you.
@@ -96,12 +104,17 @@ impl eframe::App for TemplateApp {
             egui::warn_if_debug_build(ui);
         });
 
-        if false {
+        if true {
             egui::Window::new("Window").show(ctx, |ui| {
                 ui.label("Windows can be moved by dragging them.");
                 ui.label("They are automatically sized based on contents.");
                 ui.label("You can turn on resizing and scrolling if you like.");
                 ui.label("You would normally chose either panels OR windows.");
+                if ui.button("Click Me!").clicked() {
+                    let evt = EventBuilder::new();
+                    *date_label = Local::now().timestamp_millis().to_string();
+                }
+                ui.label(date_label.to_owned());
             });
         }
     }
